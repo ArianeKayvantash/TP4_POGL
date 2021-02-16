@@ -92,12 +92,30 @@ class Sommet {
 	public void afficheNom() {System.out.print(nom+" ");}
 
 	public void affiche(){
-    	System.out.print(nom);
-		System.out.print("< ");
+    	System.out.print(nom + " " + couleur);
+		System.out.print(" [ ");
 		for(Arete e : incidences){
 			e.autreExtremite(this).afficheNom();
 		}
-		System.out.println(">");
+		System.out.print("]");
+		System.out.println("__");
+	}
+
+	public boolean verification(){
+		for(Arete e : incidences) {
+			Sommet voisin = e.autreExtremite(this);
+			if (voisin.couleur == this.couleur)
+				return false;
+		}
+		return true;
+	}
+
+	public int colorie(){
+		this.couleur=0;
+		while(!verification()){
+			this.couleur++;
+		}
+		return this.couleur;
 	}
 
 }
@@ -122,7 +140,7 @@ class Arete {
 	// On inscrit l'arête dans les listes d'incidence de ses extrémités
 	s1.ajouteArete(this);
 	s2.ajouteArete(this);
-
+	s1.colorie();
 
 	}
 
