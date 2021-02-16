@@ -100,7 +100,7 @@ class Sommet {
 			e.autreExtremite(this).afficheNom();
 		}
 		System.out.print("]");
-		System.out.println("__");
+		System.out.println("__ ");
 	}
 
 	public boolean verification(){
