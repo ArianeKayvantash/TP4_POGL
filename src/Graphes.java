@@ -91,9 +91,13 @@ class Sommet {
 
 	public void afficheNom() {System.out.print(nom+" ");}
 
-	public void affiche() {
+	public void affiche(){
     	System.out.print(nom);
-		System.out.println("__");
+		System.out.print("< ");
+		for(Arete e : incidences){
+			e.autreExtremite(this).afficheNom();
+		}
+		System.out.println(">");
 	}
 
 }
