@@ -73,14 +73,16 @@ class Sommet {
     private int couleur=0;
     // Ensemble des arêtes incidentes
     private Set<Arete> incidences;
-
+	private Map<Sommet, Integer> distances;
 
 	public Sommet( String n) {
-	nom = n;
+		nom = n;
 	// Un sommet est créé sans arêtes incidentes.
 	// Le seul sommet accessible est lui-même, via le chemin vide.
-	incidences = new HashSet<Arete>();
-		 	}
+		incidences = new HashSet<Arete>();
+		distances = new HashMap<Sommet, Integer>();
+		distances.put(this,0);
+	}
 
 
     public void ajouteArete(Arete a) {
@@ -118,6 +120,26 @@ class Sommet {
 		return this.couleur;
 	}
 
+	public Set<Sommet> accessibles(){
+		return new HashSet<>(distances.keySet());
+	}
+
+	public void updateDistances(Sommet nvVoisin, Arete nvArete){
+		for(Sommet s1 : accessibles()){
+			for(Sommet s2 : nvVoisin.accessibles()){
+				int nvDistance = distances.get(s1)+nvArete.getPoids()+nvVoisin.distances.get(s2);
+				if(!s1.distances.containsKey(s2)){
+					s1.distances.put(s2,nvDistance);
+				}else{
+					if(s1.distances.get(s2) > nvDistance){
+						s1.distances.replace(s2,nvDistance);
+					}
+				}
+			}
+		}
+
+	}
+
 }
 
 // Une arête a deux extrémités (ordre arbitraire, on regarde des graphes
@@ -141,7 +163,8 @@ class Arete {
 	s1.ajouteArete(this);
 	s2.ajouteArete(this);
 	s1.colorie();
-
+	s1.updateDistances(s2,this);
+	s2.updateDistances(s1,this);
 	}
 
     // Donne l'autre extrémité
